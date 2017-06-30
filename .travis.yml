@@ -26,6 +26,8 @@ script:
   - ansible-lint tests/test.yml
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  # Execute
+  - ansible-playbook tests/test.yml -i tests/inventory
   # Check idempotence
   - "ansible-playbook tests/test.yml -i tests/inventory | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
 
