@@ -11,6 +11,9 @@ addons:
     packages:
     - python-pip
 
+env:
+  - SKIP_LIST=ANSIBLE0016
+
 install:
   # Install ansible tools
   - pip install ansible ansible-lint
@@ -23,7 +26,7 @@ install:
 
 script:
   # Ansible lint check
-  - ansible-lint tests/test.yml
+  - ansible-lint tests/test.yml -x $SKIP_LIST
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   # Execute
