@@ -1,6 +1,6 @@
 galaxy_info:
   author: Larry Smith Jr.
-  description: your description
+  description: An Ansible role to configure /etc/apt/sources.list on Debian/Ubuntu systems.
 
   license: MIT
 
