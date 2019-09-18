@@ -9,15 +9,14 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - jessie
+        - buster
         - stretch
-        - wheezy
     - name: Ubuntu
       versions:
+        - bionic
         - precise
         - trusty
         - xenial
-        - zesty
   galaxy_tags:
     - system
 
