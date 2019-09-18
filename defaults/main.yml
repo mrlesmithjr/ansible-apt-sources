@@ -17,7 +17,7 @@ apt_sources_archive_types:
 # Specific to Debian not Ubuntu
 apt_sources_debian_components:
   - main
-  - contrib"
+  - contrib
   - non-free
 
 # The release class (oldstable, stable, testing, unstable) respectively.
