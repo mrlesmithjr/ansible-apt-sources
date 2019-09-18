@@ -1,14 +1,22 @@
 ---
 # tasks file for ansible-apt-sources
 - block:
-    - name: debian | Updating /etc/apt/sources.list
+    - name: Installing Pre-Reqs
+      apt:
+        name: ["python-apt"]
+        state: present
+      become: true
+      register: result
+      until: result is successful
+
+    - name: Updating /etc/apt/sources.list
       template:
         src: etc/apt/sources.list.j2
         dest: /etc/apt/sources.list
       become: true
       register: _apt_sources_updated
 
-    - name: debian | Updating apt cache
+    - name: Updating apt cache
       apt:
         update_cache: true
       become: true
