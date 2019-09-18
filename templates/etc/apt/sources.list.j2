@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 {% if ansible_distribution == "Debian" %}
 {%   for item in apt_sources_archive_types %}
