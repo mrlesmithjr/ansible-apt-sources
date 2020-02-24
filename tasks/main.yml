@@ -1,14 +1,6 @@
 ---
 # tasks file for ansible-apt-sources
 - block:
-    - name: Installing Pre-Reqs
-      apt:
-        name: ["python-apt"]
-        state: present
-      become: true
-      register: result
-      until: result is successful
-
     - name: Updating /etc/apt/sources.list
       template:
         src: etc/apt/sources.list.j2
