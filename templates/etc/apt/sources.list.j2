@@ -11,7 +11,7 @@
 {{ item }} {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }}-security {{ apt_sources_debian_distribution }}/updates main
 {%          else %}
 {{ item }} {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }}-security {{ apt_sources_debian_distribution }}-security main
-{%          endif %} 
+{%          endif %}
 {%     endif %}
 {%     if apt_sources_enable_updates %}
 {{ item }} {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }} {{ apt_sources_debian_distribution }}-updates {{ apt_sources_debian_components|join (' ') }}
