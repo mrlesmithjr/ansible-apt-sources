@@ -23,7 +23,7 @@ apt_sources_debian_components:
 # The release class (oldstable, stable, testing, unstable) respectively.
 #
 # Specific to Debian not Ubuntu
-apt_sources_debian_distribution: stable
+apt_sources_debian_distribution: "{{ ansible_distribution_release }}"
 
 # Specific to Debian not Ubuntu
 apt_sources_debian_repository_url: http://deb.debian.org
