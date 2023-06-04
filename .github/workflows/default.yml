@@ -23,17 +23,17 @@ jobs:
           # - centos7
           # - centos8
           # - debian8
-          - debian9
+          # - debian9
           - debian10
-          # - debian11
+          - debian11
           # - fedora
           # - fedora34
           # - fedora35
           # - rocky8
           - ubuntu1604
           - ubuntu1804
-          # - ubuntu2004
-          # - ubuntu2204
+          - ubuntu2004
+          - ubuntu2204
         python-version: [3.9]
 
     steps:
