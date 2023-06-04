@@ -3,7 +3,7 @@ galaxy_info:
   author: Larry Smith Jr.
   description: Ansible role to configure /etc/apt/sources.list on Debian/Ubuntu systems.
   license: MIT
-  min_ansible_version: 2.8
+  min_ansible_version: "2.8"
   role_name: ansible_apt_sources
   namespace: mrlesmithjr
 

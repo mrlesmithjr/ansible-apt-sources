@@ -3,5 +3,5 @@
   hosts: all
   tasks:
     - name: Include ansible-apt-sources
-      include_role:
+      ansible.builtin.include_role:
         name: ansible-apt-sources
