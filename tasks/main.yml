@@ -1,17 +1,18 @@
 ---
 # tasks file for ansible-apt-sources
-- block:
-    - name: Updating /etc/apt/sources.list
-      template:
-        src: etc/apt/sources.list.j2
-        dest: /etc/apt/sources.list
-      become: true
-      register: _apt_sources_updated
-
-    - name: Updating apt cache
-      apt:
-        update_cache: true
-      become: true
-      when: _apt_sources_updated['changed']
-
+- name: Updating /etc/apt/sources.list
+  ansible.builtin.template:
+    src: etc/apt/sources.list.j2
+    dest: /etc/apt/sources.list
+    mode: u=rw,g=r,o=r
+  become: true
+  register: _apt_sources_updated
   when: ansible_os_family == "Debian"
+
+- name: Updating apt cache # noqa no-handler
+  ansible.builtin.apt:
+    update_cache: true
+  become: true
+  when:
+    - ansible_os_family == "Debian"
+    - _apt_sources_updated['changed']
