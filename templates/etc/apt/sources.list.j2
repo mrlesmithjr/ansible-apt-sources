@@ -30,7 +30,7 @@ deb {{ apt_sources_debian_debug_repository_url }}/{{ ansible_distribution|lower 
 {{ item }} {{ apt_sources_ubuntu_repository_url }}/{{ ansible_distribution|lower }} {{ ansible_distribution_release|lower }}-proposed {{ apt_sources_ubuntu_components|join (' ') }}
 {%     endif %}
 {%     if apt_sources_enable_security %}
-{{ item }} {{ apt_sources_ubuntu_repository_url }}/{{ ansible_distribution|lower }} {{ ansible_distribution_release|lower }}-security {{ apt_sources_ubuntu_components|join (' ') }}
+{{ item }} {{ apt_sources_ubuntu_security_url }}/{{ ansible_distribution|lower }} {{ ansible_distribution_release|lower }}-security {{ apt_sources_ubuntu_components|join (' ') }}
 {%     endif %}
 {%     if apt_sources_enable_updates %}
 {{ item }} {{ apt_sources_ubuntu_repository_url }}/{{ ansible_distribution|lower }} {{ ansible_distribution_release|lower }}-updates {{ apt_sources_ubuntu_components|join (' ') }}

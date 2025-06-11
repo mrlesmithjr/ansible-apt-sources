@@ -1,0 +1,53 @@
+{{ ansible_managed | comment }}
+
+{% if ansible_distribution == "Debian" %}
+# Main Debian repository
+Types: {{ apt_sources_archive_types | join(' ') }}
+URIs: {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }}
+Suites: {{ apt_sources_debian_distribution }}{% if apt_sources_enable_updates %} {{ apt_sources_debian_distribution }}-updates{% endif %}{% if apt_sources_enable_backports %} {{ ansible_distribution_release|lower }}-backports{% endif %}
+
+Components: {{ apt_sources_debian_components | join(' ') }}
+Signed-By: {{ apt_sources_debian_keyring }}
+
+{%   if apt_sources_enable_security %}
+# Debian Security
+Types: {{ apt_sources_archive_types | join(' ') }}
+{%     if ansible_distribution_major_version | int < 11 %}
+URIs: {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }}-security
+Suites: {{ apt_sources_debian_distribution }}/updates
+{%     else %}
+URIs: {{ apt_sources_debian_repository_url }}/{{ ansible_distribution|lower }}-security
+Suites: {{ apt_sources_debian_distribution }}-security
+{%     endif %}
+Components: {{ apt_sources_debian_components | join(' ') }}
+Signed-By: {{ apt_sources_debian_keyring }}
+
+{%   endif %}
+{%   if apt_sources_enable_debug %}
+# Debian Debug
+Types: deb
+URIs: {{ apt_sources_debian_debug_repository_url }}/{{ ansible_distribution|lower }}-debug
+Suites: {{ apt_sources_debian_distribution }}-debug
+Components: {{ apt_sources_debian_components | join(' ') }}
+Signed-By: {{ apt_sources_debian_keyring }}
+
+{%   endif %}
+{% elif ansible_distribution == "Ubuntu" %}
+# Main Ubuntu repository
+Types: {{ apt_sources_archive_types | join(' ') }}
+URIs: {{ apt_sources_ubuntu_repository_url }}/{{ ansible_distribution|lower }}/
+Suites: {{ ansible_distribution_release|lower }}{% if apt_sources_enable_updates %} {{ ansible_distribution_release|lower }}-updates{% endif %}{% if apt_sources_enable_backports %} {{ ansible_distribution_release|lower }}-backports{% endif %}{% if apt_sources_enable_proposed %} {{ ansible_distribution_release|lower }}-proposed{% endif %}
+
+Components: {{ apt_sources_ubuntu_components | join(' ') }}
+Signed-By: {{ apt_sources_ubuntu_keyring }}
+
+{%   if apt_sources_enable_security %}
+# Ubuntu Security
+Types: {{ apt_sources_archive_types | join(' ') }}
+URIs: {{ apt_sources_ubuntu_security_url }}/{{ ansible_distribution|lower }}/
+Suites: {{ ansible_distribution_release|lower }}-security
+Components: {{ apt_sources_ubuntu_components | join(' ') }}
+Signed-By: {{ apt_sources_ubuntu_keyring }}
+
+{%   endif %}
+{% endif %}

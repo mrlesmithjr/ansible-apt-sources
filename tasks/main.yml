@@ -1,18 +1,44 @@
 ---
 # tasks file for ansible-apt-sources
-- name: Updating /etc/apt/sources.list
+- name: Create migration message in sources.list when using DEB822
+  ansible.builtin.copy:
+    content: |
+      # This file is managed by Ansible
+      # {{ ansible_distribution }} sources have moved to /etc/apt/sources.list.d/{{ ansible_distribution|lower }}.sources
+    dest: /etc/apt/sources.list
+    mode: u=rw,g=r,o=r
+  become: true
+  when:
+    - ansible_os_family == "Debian"
+    - apt_sources_use_deb822
+
+- name: Configure APT sources (DEB822 format)
+  ansible.builtin.template:
+    src: etc/apt/sources.list.d/distro.sources.j2
+    dest: "/etc/apt/sources.list.d/{{ ansible_distribution|lower }}.sources"
+    mode: u=rw,g=r,o=r
+  become: true
+  register: _apt_sources_deb822_updated
+  when:
+    - ansible_os_family == "Debian"
+    - apt_sources_use_deb822
+
+- name: Configure APT sources (Legacy format)
   ansible.builtin.template:
     src: etc/apt/sources.list.j2
     dest: /etc/apt/sources.list
     mode: u=rw,g=r,o=r
   become: true
-  register: _apt_sources_updated
-  when: ansible_os_family == "Debian"
+  register: _apt_sources_legacy_updated
+  when:
+    - ansible_os_family == "Debian"
+    - not apt_sources_use_deb822
 
-- name: Updating apt cache # noqa no-handler
+- name: Update APT cache # noqa no-handler
   ansible.builtin.apt:
     update_cache: true
   become: true
   when:
     - ansible_os_family == "Debian"
-    - _apt_sources_updated['changed']
+    - (_apt_sources_deb822_updated is defined and _apt_sources_deb822_updated.changed) or
+      (_apt_sources_legacy_updated is defined and _apt_sources_legacy_updated.changed)

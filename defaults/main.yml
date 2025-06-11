@@ -1,50 +1,67 @@
 ---
 # defaults file for ansible-apt-sources
-# deb or deb-src, indicates the type of archive
+
+# Archive types: deb (binary packages) or deb-src (source packages)
 apt_sources_archive_types:
   - deb
   - deb-src
 
-# main consists of DFSG-compliant packages, which do not rely on software
-# outside this area to operate. These are the only packages considered part of
-# the Debian distribution.
-#
-# contrib packages contain DFSG-compliant software, but have dependencies not
-# in main (possibly packaged for Debian in non-free).
-#
-# non-free contains software that does not comply with the DFSG.
-#
 # Specific to Debian not Ubuntu
+# Components explanation:
+# - main: DFSG-compliant packages, core of Debian distribution
+# - contrib: DFSG-compliant software with dependencies not in main
+# - non-free: Software that does not comply with DFSG (proprietary)
 apt_sources_debian_components:
   - main
   - contrib
   - non-free
 
-# The release class (oldstable, stable, testing, unstable) respectively.
-#
-# Specific to Debian not Ubuntu
+# Distribution can be:
+# - Release name (bookworm, bullseye, etc.)
+# - Release class (oldstable, stable, testing, unstable)
 apt_sources_debian_distribution: "{{ ansible_distribution_release }}"
 
-# Specific to Debian not Ubuntu
 apt_sources_debian_repository_url: http://deb.debian.org
 apt_sources_debian_debug_repository_url: http://debug.mirrors.debian.org
 
-apt_sources_enable_backports: true
-
-apt_sources_enable_proposed: false
-
-apt_sources_enable_security: true
-
-apt_sources_enable_updates: true
-
+# Enable debug packages repository (contains debugging symbols)
 apt_sources_enable_debug: false
 
 # Specific to Ubuntu not Debian
+# Components explanation:
+# - main: Canonical-supported free and open-source software
+# - universe: Community-maintained free and open-source software
+# - restricted: Proprietary drivers for devices
+# - multiverse: Software restricted by copyright or legal issues
 apt_sources_ubuntu_components:
   - main
-  - multiverse
-  - restricted
   - universe
+  - restricted
+  - multiverse
 
-# Specific to Ubuntu not Debian
 apt_sources_ubuntu_repository_url: http://archive.ubuntu.com
+
+# Ubuntu security repository URL (defaults to same as main repository)
+apt_sources_ubuntu_security_url: "{{ apt_sources_ubuntu_repository_url }}"
+
+# Enable proposed repository (pre-release updates for testing)
+apt_sources_enable_proposed: false
+
+# Common to Debian and Ubuntu
+# Suites explanation:
+# - backports: Newer versions of software backported from testing/unstable
+# - security: Critical security updates
+# - updates: Recommended updates (bug fixes, minor enhancements)
+apt_sources_enable_backports: true
+apt_sources_enable_security: true
+apt_sources_enable_updates: true
+
+# DEB822 format support (Debian >= 12, Ubuntu >= 24)
+# Modern APT sources format using structured fields instead of one-line format
+apt_sources_debian_keyring: /usr/share/keyrings/debian-archive-keyring.gpg
+apt_sources_ubuntu_keyring: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+apt_sources_use_deb822: >-
+  {{
+    (ansible_distribution == "Debian" and ansible_distribution_major_version | int >= 12) or
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version | int >= 24)
+  }}
